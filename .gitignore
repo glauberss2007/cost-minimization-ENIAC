@@ -1,0 +1,6 @@
+cmake-build-debug/
+.idea/
+/build*
+/.vscode
+/cpm_modules
+.DS_Store
