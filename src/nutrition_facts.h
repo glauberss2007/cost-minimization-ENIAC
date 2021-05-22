@@ -109,18 +109,14 @@ class nutrition_facts {
     /// Generate a users history based on a random generator
     /// Limited by types and quantities of food per meal (used in literature)
     static void generate_history(
-        std::vector<std::vector<int>> &__breakfastPreferencesMatrix,
-        std::vector<std::vector<int>> &__snack1PreferencesMatrix,
-        std::vector<std::vector<int>> &__lunchPreferencesMatrix,
-        std::vector<std::vector<int>> &__snack2PreferencesMatrix,
-        std::vector<std::vector<int>> &__dinnerPreferencesMatrix,
-        std::vector<std::vector<int>> &__supperPreferencesMatrix,
-        std::vector<std::vector<int>> &__breakfastPortionsPreferencesMatrix,
-        std::vector<std::vector<int>> &__snack1PortionsPreferencesMatrix,
-        std::vector<std::vector<int>> &__lunchPortionsPreferencesMatrix,
-        std::vector<std::vector<int>> &__snack2PortionsPreferencesMatrix,
-        std::vector<std::vector<int>> &__dinnerPortionsPreferencesMatrix,
-        std::vector<std::vector<int>> &__supperPortionsPreferencesMatrix);
+        std::vector<std::vector<int>> &_breakfastPreferencesMatrix,
+        std::vector<std::vector<int>> &_lunchPreferencesMatrix,
+        std::vector<std::vector<int>> &_snack2PreferencesMatrix,
+        std::vector<std::vector<int>> &_dinnerPreferencesMatrix,
+        std::vector<std::vector<int>> &_breakfastPortionsPreferencesMatrix,
+        std::vector<std::vector<int>> &_lunchPortionsPreferencesMatrix,
+        std::vector<std::vector<int>> &_snack2PortionsPreferencesMatrix,
+        std::vector<std::vector<int>> &_dinnerPortionsPreferencesMatrix);
   private:
     int _turno;
     int _mealstimeQuantity;
