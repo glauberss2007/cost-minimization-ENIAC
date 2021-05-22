@@ -1,34 +1,21 @@
-
 #include "dinamic_optimization.h"
 #include "evolutionary_algorithm.h"
 #include "user_diet.h"
 #include "user_preferences.h"
 
 void run_static_mealstime_model(std::string& file_output){
-
     // For experimental purposes we will create the user only with the essential information to solve the problem
     predictions::user_preferences u;
     u.setName(file_output);
-    u.setMealsTime({6, 10, 12, 15, 18, 21});
-    u.SetCaloriesTarget(2000);  //+ (u.getCaloriesBurn()*100));
+    u.setMealsTime({9, 13, 16, 19});
+    u.SetCaloriesTarget(2000);
 
-    /*
-    //These parameters will be used in the future for "user-based" preferences predictions
-    u.setHigh(157);
-    u.setGender(1); // true = mulher / false = homem
-    u.setPais("Brasil");
-    u.setWeight(52);
-    u.setAge(26);
-    u.setCaloriesBurn(3); // 0 = sedentario - 5 = Esportista
-    u.setHobbyes({"Esporte"});
-    */
-
-    //Prints on screen and in file
+    // Prints on screen and file
     u.printScreenUser(u);
     std::ofstream fout(file_output, std::ofstream::out | std::ofstream::app);
     u.printScreenFile(u, fout);
 
-    //Recreates the problem considering user data
+    // Recreates the problem considering user data
     nutrition_facts problem(568, u.getTarget(),
                             u.getMealsTime());
 
