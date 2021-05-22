@@ -84,17 +84,6 @@ void evolutionary_algorithm::run() {
     for (double _fx : _fxs) ofs << _fx << ",";
     ofs << std::endl;
     ofs.close();
-
-    /*
-    // Generate matplot convergence image
-    auto a = matplot::plot(_generations,_fxs);
-    matplot::xlabel("Generation");
-    matplot::ylabel("Objective Function");
-    // Export matplot convergence and vetorial image and latex
-    matplot::save(LOCAL_PATH_EXPORTS"/exports/convergence-curve/FXs.svg");
-    matplot::save(LOCAL_PATH_EXPORTS"/exports/convergence-curve/", "epslatex");
-    matplot::show();
-     */
 }
 double_t iteration;
 
