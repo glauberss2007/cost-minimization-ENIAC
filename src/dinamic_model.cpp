@@ -8,35 +8,25 @@ void run_dinamic_model(const std::string& file_output) {
     // For experimental purposes we will create user only with the essential information to solve the problem
     predictions::user_preferences u;
     u.setName(file_output);
-    u.setMealsTime({6, 10, 12, 15, 18, 21});
+    u.setMealsTime({9, 13, 16, 19});
     u.SetCaloriesTarget(2000);
-
     // Prints on screen and file
     u.printScreenUser(u);
     std::ofstream fout(file_output);
     u.printScreenFile(u, fout);
-
     //Creates the problem considering user data
     nutrition_facts problem(568, u.getTarget(), u.getMealsTime());
     problem.setModelToUse(nutrition_facts::DINAMIC_ONLY);
-
     // Prints the problem on the screen and in file
     problem.disp();
     problem.dispFile(fout, u.getTarget(), u.getNumberOfMealsTime());
-
     // Start counting time
     clock_t time_req;
     time_req = clock();
-
     //Configures the model as static
     problem.setCaloriesTargetChangeFlag(0);
-
     // Creates dynamic object
     iteration::Dinamic d;
-
-    //Variables used for preferences predictions
-    std::vector<std::vector<double>> _snack1MatrixItens,_lunchMatrixItens,
-        _snack2MatrixItens,_dinnerMatrixItens,_supperMatrixItens;
 
     for (int i = 0; i < problem.numberOfMealstime(); i++) {
         // Configures turn and mealstime
@@ -79,7 +69,6 @@ void run_dinamic_model(const std::string& file_output) {
         // STORE THE DIET
         d.saveCurrentMenu(d.getCurrentSolution(), d.getCurrentPortions());
     }
-
     // Print and save to file the IDs of the diets generated and their portions
     int hour = 0;
     d.printScreenMenu(problem.numberOfMealstime(), problem.getHour(),
@@ -353,160 +342,6 @@ void run_dinamic_model(const std::string& file_output) {
     }
 
     hour = 3;
-
-    d.clearInputs();
-    //d.userItemInput(problem.getHour(hour));
-    d.parameter_input(hour,problem.size());
-    d.print_user_input(d.getInputID(),d.getInputPortions(),fout);
-
-    u.setSnack2Preferences(d.getInputID());
-    u.setSnack2PreferencesPortions(d.getInputPortions());
-
-    d.setCaloriesTargetChangeFlag(d.compareMealstimeItens(u.getSnack2Preferences(),
-                                                          u.getSnack2PreferencesPortions(),
-                                                          hour));
-
-    if (d.getCaloriesTargetChangeFlag()) {
-        d.clearMatrix(hour);
-        d.setCaloricDiference(d.caloricDiferenceCalculation(
-            problem.getHour(hour), fout, d.getInputID(), d.getInputPortions(),
-            problem.getCalories(),
-            problem.getCaloricTargetSnack2() + d.getCurrentBalance()));
-        std::cout << "Current calories balance applied " << d.getCurrentBalance() << std::endl;
-        d.setMeasltimeLeft(d.measltimeLeftCalc(
-                hour, u.getNumberOfMealsTime()));
-        d.setDiferenceForNextMeasltimes(d.applyCaloriesBalance(
-                d.getCaloricDiference(), d.getMeasltimesLeft(), fout));
-        d.setNextMealsNewCaloriesTarget(d.getCurrentBalance() +
-                                        d.getDiferenceForNextMeasltimes());
-        problem.setCaloriesTargetChangeFlag(d.getDiferenceForNextMeasltimes());
-
-        hour++;
-        for (int i = 0; i < d.getMeasltimesLeft(); i++) {
-
-            problem.setTurn(i + 5);
-            std::cout << "Current measltime shift: " << problem.turn() << std::endl;
-            fout << "Current measltime shift: " << problem.turn() << std::endl;
-
-            using solver_t = evolutionary_algorithm;
-            solver_t solver(problem);
-            solver.algorithm();
-
-            solver.run();
-
-            auto iter = solver.best_solution();
-            std::cout << std::endl;
-            fout << std::endl;
-            std::cout << "Mealstime shift: " << i + 4 << std::endl;
-            fout << "Measltime shift: " << i + 4 << std::endl;
-            std::cout << "Mealtime: " << problem.getHour(i + 3)
-                      << std::endl;
-            fout << "Mealtime: " << problem.getHour(i + 3) << std::endl;
-            std::cout << "Solution: " << std::endl;
-            fout << "Solution: " << std::endl;
-            d.setCurrentSolution((iter)->disp(problem, fout));
-            //d.setCurrentMealtimePortionSolution((iter)->porcao(problem,  d.getCurrentSolution(), fout));
-            std::cout << "FO: " << (((iter)->fx)) << std::endl;
-            fout << "FO: " << (((iter)->fx)) << std::endl;
-            std::cout << "................................................."
-                         "..........................."
-                      << std::endl;
-            fout << "......................................................"
-                    "......................"
-                 << std::endl;
-            std::cout << std::endl;
-            std::cout << std::endl;
-            fout << std::endl;
-            fout << std::endl;
-
-            d.saveCurrentMenu(d.getCurrentSolution(),
-                              d.getCurrentPortions());
-        }
-        d.printScreenMenu(problem.numberOfMealstime(), problem.getHour(),
-                          problem.getRecipies(), hour);
-        d.printFileMenu(problem.numberOfMealstime(),
-                        problem.getHour(), problem.getRecipies(),
-                        hour, fout);
-    }
-    hour = 4;
-
-    d.clearInputs();
-    //d.userItemInput(problem.getHour(hour));
-    d.parameter_input(hour,problem.size());
-    d.print_user_input(d.getInputID(),d.getInputPortions(),fout);
-
-    u.setDinnerPreferences(d.getInputID());
-    u.setDinnerPreferencesPortions(d.getInputPortions());
-
-    d.setCaloriesTargetChangeFlag(d.compareMealstimeItens(u.getDinnerPreferences(),
-                                                          u.getDinnerPreferencesPortions(),
-                                                          hour));
-
-    if (d.getCaloriesTargetChangeFlag()) {
-        d.clearMatrix(hour);
-        d.setCaloricDiference(d.caloricDiferenceCalculation(
-            problem.getHour(hour), fout, d.getInputID(), d.getInputPortions(),
-            problem.getCalories(),
-            (problem.getDinnerCaloriesTarget() + d.getCurrentBalance())));
-        std::cout << "Current balance calories:" << d.getCurrentBalance() << std::endl;
-        d.setMeasltimeLeft(d.measltimeLeftCalc(
-                hour, u.getNumberOfMealsTime()));
-        d.setDiferenceForNextMeasltimes(d.applyCaloriesBalance(
-                d.getCaloricDiference(), d.getMeasltimesLeft(), fout));
-        d.setNextMealsNewCaloriesTarget(d.getCurrentBalance() +
-                                        d.getDiferenceForNextMeasltimes());
-        problem.setCaloriesTargetChangeFlag(d.getDiferenceForNextMeasltimes());
-
-
-
-        hour++;
-        for (int i = 0; i < d.getMeasltimesLeft(); i++) {
-
-            problem.setTurn(i + 6);
-            std::cout << "Current mealstime shift: " << problem.turn() << std::endl;
-            fout << "Current mealstime shift: " << problem.turn() << std::endl;
-
-            using solver_t = evolutionary_algorithm;
-            solver_t solver(problem);
-            solver.algorithm();
-
-            solver.run();
-
-            auto iter = solver.best_solution();
-            std::cout << std::endl;
-            fout << std::endl;
-            std::cout << "Current mealstime: " << i + 5 << std::endl;
-            fout << "Current mealstime: " << i + 5 << std::endl;
-            std::cout << "Mealstime: " << problem.getHour(i + 4)
-                      << std::endl;
-            fout << "Mealstime: " << problem.getHour(i + 4) << std::endl;
-            std::cout << "Solution: " << std::endl;
-            fout << "Solution: " << std::endl;
-            d.setCurrentSolution((iter)->disp(problem, fout));
-            //d.setCurrentMealtimePortionSolution((iter)->porcao(problem,  d.getCurrentSolution(), fout));
-            std::cout << "FO: " << (((iter)->fx)) << std::endl;
-            fout << "FO: " << (((iter)->fx)) << std::endl;
-            std::cout << "................................................."
-                         "..........................."
-                      << std::endl;
-            fout << "......................................................"
-                    "......................"
-                 << std::endl;
-            std::cout << std::endl;
-            std::cout << std::endl;
-            fout << std::endl;
-            fout << std::endl;
-
-            d.saveCurrentMenu(d.getCurrentSolution(),
-                              d.getCurrentPortions());
-        }
-        d.printScreenMenu(problem.numberOfMealstime(), problem.getHour(),
-                          problem.getRecipies(), hour);
-        d.printFileMenu(problem.numberOfMealstime(),
-                        problem.getHour(), problem.getRecipies(),
-                        hour, fout);
-    }
-    hour = 5;
 
     d.clearInputs();
     //d.userItemInput(problem.getHour(hour));
