@@ -75,13 +75,13 @@ void evolutionary_algorithm::run() {
     std::vector<int> _generations;
     for (unsigned j=0; j < _fxs.size(); j++) {
         _generations.push_back(j);
-        if (j > 0 && _fxs[j] > _fxs[j-1]) _fxs[j] = _fxs[j-1];
+        //if (j > 0 && _fxs[j] > _fxs[j-1]) _fxs[j] = _fxs[j-1];
     }
     // Convergence curve print
-    std::ofstream ofs(LOCAL_PATH_EXPORTS"experiments/dinamic_preferences_prediction/convergence.txt",
+    std::ofstream ofs(LOCAL_PATH_EXPORTS"experiments/static_cost_minimization/convergence",
                       std::ofstream::out | std::ofstream::app);
     ofs << "convergence:" << std::endl;
-    for (unsigned i =0; i<_fxs.size();i++) ofs << _fxs[i] << ",";
+    for (double _fx : _fxs) ofs << _fx << ",";
     ofs << std::endl;
     ofs.close();
 
