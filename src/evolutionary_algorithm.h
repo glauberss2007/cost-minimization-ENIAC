@@ -244,7 +244,7 @@ class evolutionary_algorithm {
     size_t _migration_size = 2;
     double _fitness_sharing_niche_size = 5.0;
     // Stopping criteria
-    size_t _max_generations = 300;
+    size_t _max_generations = 500;
     // Reproduction
     const size_t _parents_per_children = 2;
     double _children_proportion = 7.0;
