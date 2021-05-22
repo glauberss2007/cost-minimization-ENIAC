@@ -12,9 +12,6 @@ class evolutionary_algorithm {
   public:
     class individual {
       public:
-        //individual(nutrition_facts &rhs);
-        //individual(user_diet rhs);
-        //individual(user_diet &rhs);
         void mutation(nutrition_facts &p);
         void trampoline_mutation(nutrition_facts &p);
         individual crossover(nutrition_facts &p, individual &rhs);
@@ -244,7 +241,7 @@ class evolutionary_algorithm {
     size_t _migration_size = 2;
     double _fitness_sharing_niche_size = 5.0;
     // Stopping criteria
-    size_t _max_generations = 500;
+    size_t _max_generations = 300;
     // Reproduction
     const size_t _parents_per_children = 2;
     double _children_proportion = 7.0;
