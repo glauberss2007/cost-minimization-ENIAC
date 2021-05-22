@@ -5,7 +5,6 @@
 #include <stdexcept>
 #include <string>
 #include <algorithm>
-//#include <numeric>
 #include <utility>
 
 std::mt19937 nutrition_facts::_generator =
@@ -57,12 +56,10 @@ nutrition_facts::nutrition_facts(size_t n,
 
     // Food history generator for prediction
     generate_history(
-        _breakfastPreferencesMatrix, _snack1PreferencesMatrix,
-        _lunchPreferencesMatrix, _snack2PreferencesMatrix,
-        _dinnerPreferencesMatrix, _supperPreferencesMatrix,
-        _breakfastPreferencesPortionsMatrix, _snack1PreferencesPortionsMatrix,
+        _breakfastPreferencesMatrix,_lunchPreferencesMatrix, _snack2PreferencesMatrix,
+        _dinnerPreferencesMatrix, _breakfastPreferencesPortionsMatrix,
         _lunchPreferencesPortionsMatrix, _snack2PreferencesPortionsMatrix,
-        _dinnerPreferencesPortionsMatrix, _supperPreferencesPortionsMatrix);
+        _dinnerPreferencesPortionsMatrix);
 
     this->_mealstimeQuantity = static_cast<int>(this->_mealstimes.size());
 }
@@ -156,51 +153,16 @@ void nutrition_facts::disp() {
         std::cout << this->_mealstimes[1] << " Almoço" << std::endl;
         std::cout << this->_mealstimes[2] << " Jantar" << std::endl;
     } else if (this->_mealstimeQuantity == 4) {
-        std::cout << this->_mealstimes[0] << " Desjejum" << std::endl;
-        std::cout << this->_mealstimes[1] << " Almoço" << std::endl;
-        std::cout << this->_mealstimes[2] << " Lanche" << std::endl;
-        std::cout << this->_mealstimes[3] << " Jantar" << std::endl;
-    } else if (this->_mealstimeQuantity == 5) {
-        std::cout << this->_mealstimes[0] << " Desjejum" << std::endl;
-        std::cout << this->_mealstimes[1] << " Lanche" << std::endl;
-        std::cout << this->_mealstimes[2] << " Almoço" << std::endl;
-        std::cout << this->_mealstimes[3] << " Lanche" << std::endl;
-        std::cout << this->_mealstimes[4] << " Jantar" << std::endl;
-
-    } else if (this->_mealstimeQuantity == 6) {
         std::cout << this->_mealstimes[0]
                   << " Desjejum, goal: " << this->getBreakfastTarget()
                   << std::endl;
         std::cout << this->_mealstimes[1]
-                  << " Lanche 1, goal: " << this->getCaloricTargetSnack1() << std::endl;
-        std::cout << this->_mealstimes[2]
                   << " Almoço, goal: " << this->getCaloricTargetLunch() << std::endl;
         std::cout << this->_mealstimes[3]
                   << " Lanche 2, goal: " << this->getCaloricTargetSnack2() << std::endl;
         std::cout << this->_mealstimes[4]
                   << " Jantar, goal: " << this->getDinnerCaloriesTarget() << std::endl;
-        std::cout << this->_mealstimes[5]
-                  << " Ceia, goal: " << this->getSupperCaloricTarget() << std::endl;
-    } else if (this->_mealstimeQuantity == 7) {
-        std::cout << this->_mealstimes[0] << " Desjejum" << std::endl;
-        std::cout << this->_mealstimes[1] << " Lanche 1" << std::endl;
-        std::cout << this->_mealstimes[2] << " Almoço" << std::endl;
-        std::cout << this->_mealstimes[3] << " Lanche 2" << std::endl;
-        std::cout << this->_mealstimes[4] << " Lanche 3" << std::endl;
-        std::cout << this->_mealstimes[5] << " Jantar" << std::endl;
-        std::cout << this->_mealstimes[6] << " Ceia" << std::endl;
-
-    } else if (this->_mealstimeQuantity == 8) {
-        std::cout << this->_mealstimes[0] << " Desjejum";
-        std::cout << this->_mealstimes[1] << " Lanche 1";
-        std::cout << this->_mealstimes[2] << " Lanche 2";
-        std::cout << this->_mealstimes[3] << " Almoço";
-        std::cout << this->_mealstimes[4] << " Lanche 3";
-        std::cout << this->_mealstimes[5] << " Lanche 4";
-        std::cout << this->_mealstimes[6] << " Jantar";
-        std::cout << this->_mealstimes[7] << " Ceia";
     }
-
     std::cout << std::endl;
 }
 
@@ -213,8 +175,7 @@ void nutrition_facts::dispFile(std::ofstream &fout, double target,
     // << this->_calories[i] << "Kcal,R$" << this->_cost[i]<< std::endl;
     fout << "Meta calorica: " << target << std::endl;
     this->setMeta(target);
-    std::cout << "Numero de refeiçoes: " << mealstime_quantity
-              << ",calorias:" << target << std::endl;
+    std::cout << "Numero de refeiçoes: " << mealstime_quantity << ",calorias:" << target << std::endl;
     if (mealstime_quantity == 1) {
         fout << this->_mealstimes[0] << " Refeiçao unica" << std::endl;
     } else if (mealstime_quantity == 2) {
@@ -225,48 +186,10 @@ void nutrition_facts::dispFile(std::ofstream &fout, double target,
         fout << this->_mealstimes[1] << " Almoço" << std::endl;
         fout << this->_mealstimes[2] << " Jantar" << std::endl;
     } else if (mealstime_quantity == 4) {
-        fout << this->_mealstimes[0] << " Desjejum" << std::endl;
-        fout << this->_mealstimes[1] << " Almoço" << std::endl;
-        fout << this->_mealstimes[2] << " Lanche" << std::endl;
-        fout << this->_mealstimes[3] << " Jantar" << std::endl;
-    } else if (mealstime_quantity == 5) {
-        fout << this->_mealstimes[0] << " Desjejum" << std::endl;
-        fout << this->_mealstimes[1] << " Lanche" << std::endl;
-        fout << this->_mealstimes[2] << " Almoço" << std::endl;
-        fout << this->_mealstimes[3] << " Lanche" << std::endl;
-        fout << this->_mealstimes[4] << " Jantar" << std::endl;
-
-    } else if (mealstime_quantity == 6) {
-        fout << this->_mealstimes[0]
-             << " Desjejum, goal: " << this->getBreakfastTarget() << std::endl;
-        fout << this->_mealstimes[1]
-             << " Lanche 1, goal: " << this->getCaloricTargetSnack1() << std::endl;
-        fout << this->_mealstimes[2] << " Almoço, goal: " << this->getCaloricTargetLunch()
-             << std::endl;
-        fout << this->_mealstimes[3]
-             << " Lanche 2, goal: " << this->getCaloricTargetSnack2() << std::endl;
-        fout << this->_mealstimes[4] << " Jantar, goal: " << this->getDinnerCaloriesTarget()
-             << std::endl;
-        fout << this->_mealstimes[5] << " Ceia, goal: " << this->getSupperCaloricTarget()
-             << std::endl;
-    } else if (mealstime_quantity == 7) {
-        fout << this->_mealstimes[0] << " Desjejum" << std::endl;
-        fout << this->_mealstimes[1] << " Lanche 1" << std::endl;
-        fout << this->_mealstimes[2] << " Almoço" << std::endl;
-        fout << this->_mealstimes[3] << " Lanche 2" << std::endl;
-        fout << this->_mealstimes[4] << " Lanche 3" << std::endl;
-        fout << this->_mealstimes[5] << " Jantar" << std::endl;
-        fout << this->_mealstimes[6] << " Ceia" << std::endl;
-
-    } else if (mealstime_quantity == 8) {
-        fout << this->_mealstimes[0] << " Desjejum";
-        fout << this->_mealstimes[1] << " Lanche 1";
-        fout << this->_mealstimes[2] << " Lanche 2";
-        fout << this->_mealstimes[3] << " Almoço";
-        fout << this->_mealstimes[4] << " Lanche 3";
-        fout << this->_mealstimes[5] << " Lanche 4";
-        fout << this->_mealstimes[6] << " Jantar";
-        fout << this->_mealstimes[7] << " Ceia";
+        fout << this->_mealstimes[0] << " Desjejum, goal: " << this->getBreakfastTarget() << std::endl;
+        fout << this->_mealstimes[1] << " Almoço, goal: " << this->getCaloricTargetLunch() << std::endl;
+        fout << this->_mealstimes[3] << " Lanche 2, goal: " << this->getCaloricTargetSnack2() << std::endl;
+        fout << this->_mealstimes[4] << " Jantar, goal: " << this->getDinnerCaloriesTarget() << std::endl;
     }
     fout << std::endl;
 }
@@ -332,9 +255,9 @@ double nutrition_facts::getCaloricTargetSnack1() { return (this->caloriesTarget 
 
 double nutrition_facts::getCaloricTargetLunch() { return (this->caloriesTarget / 100 * 30); }
 
-double nutrition_facts::getCaloricTargetSnack2() { return (this->caloriesTarget / 100 * 10); }
+double nutrition_facts::getCaloricTargetSnack2() { return (this->caloriesTarget / 100 * 20); }
 
-double nutrition_facts::getDinnerCaloriesTarget() { return (this->caloriesTarget / 100 * 20); }
+double nutrition_facts::getDinnerCaloriesTarget() { return (this->caloriesTarget / 100 * 30); }
 
 double nutrition_facts::getSupperCaloricTarget() { return (this->caloriesTarget / 100 * 10); }
 
@@ -498,18 +421,15 @@ void nutrition_facts::deserialize_nutrition_facts(size_t size, std::vector<int> 
 }
 
 void nutrition_facts::generate_history(
-    std::vector<std::vector<int>> &__breakfastPreferencesMatrix,
-    std::vector<std::vector<int>> &__snack1PreferencesMatrix,
-    std::vector<std::vector<int>> &__lunchPreferencesMatrix,
-    std::vector<std::vector<int>> &__snack2PreferencesMatrix,
-    std::vector<std::vector<int>> &__dinnerPreferencesMatrix,
-    std::vector<std::vector<int>> &__supperPreferencesMatrix,
-    std::vector<std::vector<int>> &__breakfastPortionsPreferencesMatrix,
-    std::vector<std::vector<int>> &__snack1PortionsPreferencesMatrix,
-    std::vector<std::vector<int>> &__lunchPortionsPreferencesMatrix,
-    std::vector<std::vector<int>> &__snack2PortionsPreferencesMatrix,
-    std::vector<std::vector<int>> &__dinnerPortionsPreferencesMatrix,
-    std::vector<std::vector<int>> &__supperPortionsPreferencesMatrix) {
+    std::vector<std::vector<int>> &_breakfastPreferencesMatrix,
+    std::vector<std::vector<int>> &_lunchPreferencesMatrix,
+    std::vector<std::vector<int>> &_snack2PreferencesMatrix,
+    std::vector<std::vector<int>> &_dinnerPreferencesMatrix,
+    std::vector<std::vector<int>> &_breakfastPortionsPreferencesMatrix,
+    std::vector<std::vector<int>> &_lunchPortionsPreferencesMatrix,
+    std::vector<std::vector<int>> &_snack2PortionsPreferencesMatrix,
+    std::vector<std::vector<int>> &_dinnerPortionsPreferencesMatrix
+    ) {
 
     // Number of users considered on history instance
     int n_users = 10;
@@ -539,7 +459,7 @@ void nutrition_facts::generate_history(
     std::uniform_int_distribution<int> proteins(307, 492);
     std::uniform_int_distribution<int> vegetables(493, 568);
 
-    std::uniform_int_distribution<int> portions(1, 3);
+    std::uniform_int_distribution<int> portions(1, 2);
 
     for (int i = 0; i < n_users; i++) {
         std::vector<int> _food1, _food2, _food3, _food4, _food5, _food6;
@@ -549,19 +469,10 @@ void nutrition_facts::generate_history(
         _food1.push_back(dairy(_generator));
         _food1.push_back(fruits(_generator));
         _food1.push_back(simpleCarbo(_generator));
-        __breakfastPreferencesMatrix.push_back(_food1);
+        _breakfastPreferencesMatrix.push_back(_food1);
         for (int j = 0; j < 3; j++)
             _portion1.push_back(portions(_generator));
-        __breakfastPortionsPreferencesMatrix.push_back(_portion1);
-
-        // Snack 1
-        _food2.push_back(almonds(_generator));
-        _food2.push_back(fruits(_generator));
-        _food2.push_back(oils(_generator));
-        __snack1PreferencesMatrix.push_back(_food2);
-        for (int j = 0; j < 3; j++)
-            _portion2.push_back(portions(_generator));
-        __snack1PortionsPreferencesMatrix.push_back(_portion2);
+        _breakfastPortionsPreferencesMatrix.push_back(_portion1);
 
         // Lunch
         _food3.push_back(proteins(_generator));
@@ -571,19 +482,19 @@ void nutrition_facts::generate_history(
         _food3.push_back(vegetables(_generator));
         _food3.push_back(vegetables(_generator));
         _food3.push_back(vegetables(_generator));
-        __lunchPreferencesMatrix.push_back(_food3);
+        _lunchPreferencesMatrix.push_back(_food3);
         for (int j = 0; j < 7; j++)
             _portion3.push_back(portions(_generator));
-        __lunchPortionsPreferencesMatrix.push_back(_portion3);
+        _lunchPortionsPreferencesMatrix.push_back(_portion3);
 
         // Snack 2
         _food4.push_back(almonds(_generator));
         _food4.push_back(fruits(_generator));
         _food4.push_back(oils(_generator));
-        __snack2PreferencesMatrix.push_back(_food4);
+        _snack2PreferencesMatrix.push_back(_food4);
         for (int j = 0; j < 3; j++)
             _portion4.push_back(portions(_generator));
-        __snack2PortionsPreferencesMatrix.push_back(_portion4);
+        _snack2PortionsPreferencesMatrix.push_back(_portion4);
 
         // Dinner
         _food5.push_back(proteins(_generator));
@@ -593,17 +504,9 @@ void nutrition_facts::generate_history(
         _food5.push_back(vegetables(_generator));
         _food5.push_back(vegetables(_generator));
         _food5.push_back(vegetables(_generator));
-        __dinnerPreferencesMatrix.push_back(_food5);
+        _dinnerPreferencesMatrix.push_back(_food5);
         for (int j = 0; j < 7; j++)
             _portion5.push_back(portions(_generator));
-        __dinnerPortionsPreferencesMatrix.push_back(_portion5);
-
-        // Supper
-        _food6.push_back(almonds(_generator));
-        _food6.push_back(simpleCarbo(_generator));
-        __supperPreferencesMatrix.push_back(_food6);
-        for (int j = 0; j < 2; j++)
-            _portion6.push_back(portions(_generator));
-        __supperPortionsPreferencesMatrix.push_back(_portion6);
+        _dinnerPortionsPreferencesMatrix.push_back(_portion5);
     }
 }
