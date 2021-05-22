@@ -13,7 +13,7 @@ void iteration::Dinamic::clearEntireMatrix() {
 }
 
 void iteration::Dinamic::clearMatrix(int horario) {
-    for (int i = 5; i > horario; i--) {
+    for (int i = 3; i > horario; i--) {
         this->_matrixIDs.pop_back();
         this->_matrixPorcoes.pop_back();
     }
@@ -87,7 +87,7 @@ void iteration::Dinamic::parameter_input(int mealtime,size_t size){
                     // ingested food id
                     int food_id = (rand() % size);
                     // portions of each food
-                    int portions_of_same_food = ((rand()% 2) + 1);
+                    int portions_of_same_food = ((rand()% 1) + 1);
                     // save chosed values
                     this->_idInput.push_back(food_id);
                     this->_portionsInput.push_back(portions_of_same_food);
@@ -96,7 +96,7 @@ void iteration::Dinamic::parameter_input(int mealtime,size_t size){
         } break;
         case 1: {
             // distinct food
-            int number_of_distinct_food = ((rand()%1)+1);
+            int number_of_distinct_food = ((rand()%2)+1);
             if(number_of_distinct_food == 0){
                 break;
             }else{
@@ -104,7 +104,7 @@ void iteration::Dinamic::parameter_input(int mealtime,size_t size){
                     // ingested food id
                     int food_id = (rand() % size);
                     // portions of each food
-                    int portions_of_same_food = ((rand() % 2)+1);
+                    int portions_of_same_food = ((rand() % 1)+1);
                     // save chosed values
                     this->_idInput.push_back(food_id);
                     this->_portionsInput.push_back(portions_of_same_food);
@@ -121,7 +121,7 @@ void iteration::Dinamic::parameter_input(int mealtime,size_t size){
                     // ingested food id
                     int food_id = (rand() % size);
                     // portions of each food
-                    int portions_of_same_food = ((rand() % 2)+1);
+                    int portions_of_same_food = ((rand() % 1)+1);
                     // save chosed values
                     this->_idInput.push_back(food_id);
                     this->_portionsInput.push_back(portions_of_same_food);
@@ -129,23 +129,6 @@ void iteration::Dinamic::parameter_input(int mealtime,size_t size){
             }
         } break;
         case 3: {
-            // distinct food
-            int number_of_distinct_food = ((rand()%1)+1);
-            if(number_of_distinct_food == 0){
-                break;
-            }else{
-                for (int i = 0; i < number_of_distinct_food; i++) {
-                    // ingested food id
-                    int food_id = (rand() % size);
-                    // portions of each food
-                    int portions_of_same_food = ((rand() % 2)+1);
-                    // save chosed values
-                    this->_idInput.push_back(food_id);
-                    this->_portionsInput.push_back(portions_of_same_food);
-                }
-            }
-        } break;
-        case 4: {
             // distinct food
             int number_of_distinct_food = ((rand()%2)+1);
             if(number_of_distinct_food == 0){
@@ -155,24 +138,7 @@ void iteration::Dinamic::parameter_input(int mealtime,size_t size){
                     // ingested food id
                     int food_id = (rand() % size);
                     // portions of each food
-                    int portions_of_same_food = ((rand() % 2)+1);
-                    // save chosed values
-                    this->_idInput.push_back(food_id);
-                    this->_portionsInput.push_back(portions_of_same_food);
-                }
-            }
-        } break;
-        case 5: {
-            // distinct food
-            int number_of_distinct_food = ((rand()%1)+1);
-            if(number_of_distinct_food == 0){
-                break;
-            }else{
-                for (int i = 0; i < number_of_distinct_food; i++) {
-                    // ingested food id
-                    int food_id = (rand() % size);
-                    // portions of each food
-                    int portions_of_same_food = ((rand() % 2)+1);
+                    int portions_of_same_food = ((rand() % 1)+1);
                     // save chosed values
                     this->_idInput.push_back(food_id);
                     this->_portionsInput.push_back(portions_of_same_food);
