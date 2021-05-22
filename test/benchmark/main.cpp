@@ -20,8 +20,6 @@ int main() {
         STATIC,
         STATIC_MEASLTIME,
         DINAMIC_ONLY,
-        DINAMIC_PREFERENCES_PREDICTION,
-        //DINAMIC_COST_MINIMIZATION_MODEL
     };
 
     /// Full instance path of foods
