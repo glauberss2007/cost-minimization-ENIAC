@@ -85,7 +85,7 @@ void iteration::Dinamic::parameter_input(int mealtime,size_t size){
             }else{
                 for (int i = 0; i < number_of_distinct_food; i++) {
                     // ingested food id
-                    int food_id = (rand() % size);
+                    int food_id = (rand()%size);
                     // portions of each food
                     int portions_of_same_food = ((rand()% 1) + 1);
                     // save chosed values

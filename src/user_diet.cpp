@@ -89,7 +89,7 @@ std::vector<int> user_diet::disp(nutrition_facts &p, std::ofstream &fout) {
 }
 
 double user_diet::avaliation_function(double total_cost, double penalties_result){
-    return 1000000/(total_cost + penalties_result*penalties_result);
+    return 10000/(total_cost + penalties_result);
 }
 
 double user_diet::penalty_calculation(double aux,double limit,double proportionality,double penalizing_factor){
