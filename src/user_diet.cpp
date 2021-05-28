@@ -89,7 +89,7 @@ std::vector<int> user_diet::disp(nutrition_facts &p, std::ofstream &fout) {
 }
 
 double user_diet::avaliation_function(double total_cost, double penalties_result){
-    return 10000/(total_cost + penalties_result);
+    return 10000/(total_cost*total_cost + penalties_result);
 }
 
 double user_diet::penalty_calculation(double aux,double limit,double proportionality,double penalizing_factor){
@@ -131,6 +131,7 @@ double user_diet::evaluate(nutrition_facts &p) {
     ///Model-based assessment function
     double proportionality = 0.0;
     double caloric_target = 0;
+    double penalties_factor = 1000;
     /// Total map data structure creation to be used on penalties calc
     std::map<std::string,double> _total_nutrients;
     _total_nutrients.emplace("total_calories",total_calories);
@@ -157,76 +158,112 @@ double user_diet::evaluate(nutrition_facts &p) {
     else if (model_avaliationFunction_and_penalties == 1 || model_avaliationFunction_and_penalties == 2 ) {
         switch (p.turn()) {
         case 1:{
-            if (model_avaliationFunction_and_penalties==2) caloric_target = p.getBreakfastTarget() - p.changeTarget();
-            else caloric_target = p.getBreakfastTarget();
+            if (model_avaliationFunction_and_penalties==2) {
+                caloric_target = p.getBreakfastTarget() - p.changeTarget();
+                if (total_cost > 5.17 && (total_cost-5.17) > 1) penalties_factor = penalties_factor/((total_cost-5.17)*100);
+            }else caloric_target = p.getBreakfastTarget();
             proportionality = 0.2;
             }
             break;
         case 2: {
-            if (model_avaliationFunction_and_penalties==2) caloric_target = p.getCaloricTargetLunch() - p.changeTarget();
+            if (model_avaliationFunction_and_penalties==2) {
+                caloric_target = p.getCaloricTargetLunch() - p.changeTarget();
+                if (total_cost > 2.58 && (total_cost - 2.58) > 1)
+                    penalties_factor = penalties_factor / ((total_cost - 2.58) * 100);
+            }
             else caloric_target = p.getCaloricTargetLunch();
-            proportionality = 0.3;
+            proportionality = 0.1;
             }
             break;
         case 3: {
-            if (model_avaliationFunction_and_penalties==2) caloric_target = p.getCaloricTargetSnack2() - p.changeTarget();
-            else caloric_target = p.getCaloricTargetSnack2();
-            proportionality = 0.2;
+            if (model_avaliationFunction_and_penalties==2) {
+                caloric_target = p.getCaloricTargetSnack2() - p.changeTarget();
+                if (total_cost > 7.75 && (total_cost - 7.75) > 1)
+                    penalties_factor = penalties_factor / ((total_cost - 7.75) * 100);
+            } else caloric_target = p.getCaloricTargetSnack2();
+            proportionality = 0.3;
             }
             break;
         case 4:{
-            if (model_avaliationFunction_and_penalties==2) caloric_target = p.getDinnerCaloriesTarget() - p.changeTarget();
-            else caloric_target = p.getDinnerCaloriesTarget();
-            proportionality = 0.3;
+            if (model_avaliationFunction_and_penalties==2) {
+                caloric_target = p.getDinnerCaloriesTarget() - p.changeTarget();
+                if (total_cost > 2.58 && (total_cost - 2.58) > 1)
+                    penalties_factor = penalties_factor / ((total_cost - 2.58) * 100);
             }
+            else caloric_target = p.getDinnerCaloriesTarget();
+            proportionality = 0.1;
+            }
+            break;
+
+        case 5:{
+            if (model_avaliationFunction_and_penalties==2) {
+                caloric_target = p.getDinnerCaloriesTarget() - p.changeTarget();
+                if (total_cost > 5.17 && (total_cost - 5.17) > 1)
+                    penalties_factor = penalties_factor / ((total_cost - 5.17) * 100);
+            }
+            else caloric_target = p.getDinnerCaloriesTarget();
+            proportionality = 0.2;
+        }
+            break;
+
+        case 6:{
+            if (model_avaliationFunction_and_penalties==2) {
+                caloric_target = p.getDinnerCaloriesTarget() - p.changeTarget();
+                if (total_cost > 2.58 && (total_cost - 2.58) > 1)
+                    penalties_factor = penalties_factor / ((total_cost - 2.58) * 100);
+            }else caloric_target = p.getDinnerCaloriesTarget();
+            proportionality = 0.1;
+
+        }
             break;
         }
     }
     //Measltime Nutritional penalties calculation
-    double nutritional_penalties = penalties_avaliation(_total_nutrients, proportionality, caloric_target);
+    double nutritional_penalties = penalties_avaliation(_total_nutrients, proportionality, caloric_target, penalties_factor);
     //Measltime Avaliation function to be maximized
     return avaliation_function(total_cost, nutritional_penalties);
 }
 /// Nutritional penalties calculation
-double user_diet::penalties_avaliation(std::map<std::string,double> &_totals, double proportionality, double caloric_deviation){
-    int penalizing_factor = 1000;
+double user_diet::penalties_avaliation(std::map<std::string,double> &_totals, double proportionality, double caloric_target, double penalties_factor){
     double penalties_sum_aux;
     double nutritional_penalty = 0;
+
     //rebalancing calories limit acording to deviation
-    double rebalanced_calories = (caloric_deviation * proportionality);
+    double rebalanced_calories = (caloric_target);
     std::abs(rebalanced_calories);
+
     // Calories
     if (_totals["total_calories"] != rebalanced_calories) {
         penalties_sum_aux = (_totals["total_calories"] - rebalanced_calories);
         std::abs(penalties_sum_aux);
-        nutritional_penalty += penalty_calculation(penalties_sum_aux,rebalanced_calories,proportionality,penalizing_factor);
+        nutritional_penalty += penalty_calculation(penalties_sum_aux,rebalanced_calories,proportionality,penalties_factor);
     }
     //Fibers
     if (_totals["total_fiber"] < 25 * proportionality) {
         penalties_sum_aux = (_totals["total_fiber"] - 25 * proportionality);
         if (penalties_sum_aux < 0)
             penalties_sum_aux *= -1;
-        nutritional_penalty += penalty_calculation(penalties_sum_aux,25,proportionality,penalizing_factor);
+        nutritional_penalty += penalty_calculation(penalties_sum_aux,25,proportionality,penalties_factor);
     }
     // Carbohidratos
     if (_totals["total_carbo"] < 150 * proportionality) {
         penalties_sum_aux = (_totals["total_carbo"] - 150 * proportionality);
         if (penalties_sum_aux < 0)
             penalties_sum_aux *= -1;
-        nutritional_penalty += penalty_calculation(penalties_sum_aux,150,proportionality,penalizing_factor);
+        nutritional_penalty += penalty_calculation(penalties_sum_aux,150,proportionality,penalties_factor);
     } else if (_totals["total_carbo"] > 300 * proportionality) {
         penalties_sum_aux = (_totals["total_carbo"] - 300 * proportionality);
-        nutritional_penalty += penalty_calculation(penalties_sum_aux,300,proportionality,penalizing_factor);
+        nutritional_penalty += penalty_calculation(penalties_sum_aux,300,proportionality,penalties_factor);
     }
     // Proteinas
     if (_totals["total_protein"] < 75 * proportionality) {
         penalties_sum_aux = (_totals["total_protein"] - 75 * proportionality);
         if (penalties_sum_aux < 0)
             penalties_sum_aux *= -1;
-        nutritional_penalty += penalty_calculation(penalties_sum_aux,75,proportionality,penalizing_factor);
+        nutritional_penalty += penalty_calculation(penalties_sum_aux,75,proportionality,penalties_factor);
     } else if (_totals["total_protein"] > 210 * proportionality) {
         penalties_sum_aux = (_totals["total_protein"] - 210 * proportionality);
-        nutritional_penalty += penalty_calculation(penalties_sum_aux,210,proportionality,penalizing_factor);
+        nutritional_penalty += penalty_calculation(penalties_sum_aux,210,proportionality,penalties_factor);
     }
 
     // Calcio
@@ -234,67 +271,67 @@ double user_diet::penalties_avaliation(std::map<std::string,double> &_totals, do
         penalties_sum_aux = (_totals["total_calc"] - 1000 * proportionality);
         if (penalties_sum_aux < 0)
             penalties_sum_aux *= -1;
-        nutritional_penalty += penalty_calculation(penalties_sum_aux,1000,proportionality,penalizing_factor);
+        nutritional_penalty += penalty_calculation(penalties_sum_aux,1000,proportionality,penalties_factor);
     } else if (_totals["total_calc"] > 2500 * proportionality) {
         penalties_sum_aux = (_totals["total_calc"] - 2500 * proportionality);
-        nutritional_penalty += penalty_calculation(penalties_sum_aux,2500,proportionality,penalizing_factor);
+        nutritional_penalty += penalty_calculation(penalties_sum_aux,2500,proportionality,penalties_factor);
     }
     //Manganes
     if (_totals["total_manganes"] < 2.3 * proportionality) {
         penalties_sum_aux = (_totals["total_manganes"] - 2.3 * proportionality);
         if (penalties_sum_aux < 0)
             penalties_sum_aux *= -1;
-        nutritional_penalty += penalty_calculation(penalties_sum_aux,2.3,proportionality,penalizing_factor);
+        nutritional_penalty += penalty_calculation(penalties_sum_aux,2.3,proportionality,penalties_factor);
     }
     //Ferro
     if (_totals["total_ferro"] < 14 * proportionality) {
         penalties_sum_aux = (_totals["total_ferro"] - 14 * proportionality);
         if (penalties_sum_aux < 0)
             penalties_sum_aux *= -1;
-        nutritional_penalty += penalty_calculation(penalties_sum_aux,14,proportionality,penalizing_factor);
+        nutritional_penalty += penalty_calculation(penalties_sum_aux,14,proportionality,penalties_factor);
     } else if (_totals["total_ferro"] > 45 * proportionality) {
         penalties_sum_aux = (_totals["total_ferro"] - 45 * proportionality);
-        nutritional_penalty += penalty_calculation(penalties_sum_aux,45,proportionality,penalizing_factor);
+        nutritional_penalty += penalty_calculation(penalties_sum_aux,45,proportionality,penalties_factor);
     }
     //Magnesio
     if (_totals["total_magnesio"] < 260 * proportionality) {
         penalties_sum_aux = (_totals["total_magnesio"] - 260 * proportionality);
         if (penalties_sum_aux < 0)
             penalties_sum_aux *= -1;
-        nutritional_penalty += penalty_calculation(penalties_sum_aux,260,proportionality,penalizing_factor);
+        nutritional_penalty += penalty_calculation(penalties_sum_aux,260,proportionality,penalties_factor);
     } else if (_totals["total_magnesio"] > 350 * proportionality) {
         penalties_sum_aux = (_totals["total_magnesio"] - 350 * proportionality);
-        nutritional_penalty += penalty_calculation(penalties_sum_aux,350,proportionality,penalizing_factor);
+        nutritional_penalty += penalty_calculation(penalties_sum_aux,350,proportionality,penalties_factor);
     }
     //Zinco
     if (_totals["total_zinc"] < 7) {
         penalties_sum_aux = (_totals["total_zinc"] - 7 * proportionality);
         if (penalties_sum_aux < 0)
             penalties_sum_aux *= -1;
-        nutritional_penalty += penalty_calculation(penalties_sum_aux,7,proportionality,penalizing_factor);
+        nutritional_penalty += penalty_calculation(penalties_sum_aux,7,proportionality,penalties_factor);
     } else if (_totals["total_zinc"] > 34) {
         penalties_sum_aux = (_totals["total_zinc"] - 34 * proportionality);
-        nutritional_penalty += penalty_calculation(penalties_sum_aux,34,proportionality,penalizing_factor);
+        nutritional_penalty += penalty_calculation(penalties_sum_aux,34,proportionality,penalties_factor);
     }
     //Fosforo
     if (_totals["total_fosfer"] < 700 * proportionality) {
         penalties_sum_aux = (_totals["total_fosfer"] - 700 * proportionality);
         if (penalties_sum_aux < 0)
             penalties_sum_aux *= -1;
-        nutritional_penalty += penalty_calculation(penalties_sum_aux,700,proportionality,penalizing_factor);
+        nutritional_penalty += penalty_calculation(penalties_sum_aux,700,proportionality,penalties_factor);
     } else if (_totals["total_fosfer"] > 4000 * proportionality) {
         penalties_sum_aux = (_totals["total_fosfer"] - 4000 * proportionality);
-        nutritional_penalty += penalty_calculation(penalties_sum_aux,4000,proportionality,penalizing_factor);
+        nutritional_penalty += penalty_calculation(penalties_sum_aux,4000,proportionality,penalties_factor);
     }
     // Lipidios
     if (_totals["total_lipid"] < 45) {
         penalties_sum_aux = (_totals["total_lipid"] - 45 * proportionality);
         if (penalties_sum_aux < 0)
             penalties_sum_aux *= -1;
-        nutritional_penalty += penalty_calculation(penalties_sum_aux,45,proportionality,penalizing_factor);
+        nutritional_penalty += penalty_calculation(penalties_sum_aux,45,proportionality,penalties_factor);
     } else if (_totals["total_lipid"] > 98) {
         penalties_sum_aux = (_totals["total_lipid"] - 98 * proportionality);
-        nutritional_penalty += penalty_calculation(penalties_sum_aux,98,proportionality,penalizing_factor);
+        nutritional_penalty += penalty_calculation(penalties_sum_aux,98,proportionality,penalties_factor);
     }
 
     return nutritional_penalty;

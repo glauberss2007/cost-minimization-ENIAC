@@ -28,7 +28,7 @@ class user_diet {
     /// evaluates the solution
     double evaluate(nutrition_facts &p);
     double avaliation_function(double total_cost, double penalties_result);
-    double penalties_avaliation(std::map<std::string,double> &_totals, double proportionality, double caloric_deviation);
+    double penalties_avaliation(std::map<std::string,double> &_totals, double proportionality, double caloric_target, double penalties_factor);
     double penalty_calculation(double aux, double limit, double proportionality, double penalizing_factor);
     void preferences_inclusion_limit(nutrition_facts &p);
 
