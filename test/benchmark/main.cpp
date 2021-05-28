@@ -31,7 +31,7 @@ int main() {
     std::string file_output = path + std::to_string(i);
 
     /// Solving the problem
-    run_experiment(problem_size, STATIC, file_output);
+    run_experiment(problem_size, STATIC_MEASLTIME, file_output);
     }
     return 0;
 }
