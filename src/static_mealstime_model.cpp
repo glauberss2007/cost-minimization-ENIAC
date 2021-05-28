@@ -7,7 +7,7 @@ void run_static_mealstime_model(std::string& file_output){
     // For experimental purposes we will create the user only with the essential information to solve the problem
     predictions::user_preferences u;
     u.setName(file_output);
-    u.setMealsTime({9, 13, 16, 19});
+    u.setMealsTime({7, 10, 13, 15, 18, 21});
     u.SetCaloriesTarget(2000);
 
     // Prints on screen and file
