@@ -87,6 +87,7 @@ class nutrition_facts {
     std::vector<double> getDinnerPreferences();
     std::vector<double> getSupperPreferences();
     std::vector<double> getCalories();
+    std::vector<double> getCost();
     // Desjejum
     std::vector<std::vector<int>> getBreakfastPreferencesMatrix();
     // Lanche da manha

@@ -79,7 +79,7 @@ void iteration::Dinamic::parameter_input(int mealtime,size_t size){
     switch (mealtime) {
         case 0: {
             // distinct food
-            int number_of_distinct_food = ((rand()%2)+1);
+            int number_of_distinct_food = ((rand()%10)+1);
             if(number_of_distinct_food == 0){
                 break;
             }else{
@@ -146,6 +146,14 @@ void iteration::Dinamic::parameter_input(int mealtime,size_t size){
             }
         } break;
     }
+}
+
+double iteration::Dinamic::getCost(std::vector<double> _cost, std::vector<int> _IDInput, std::vector<int> _portionInput){
+    double aux =0;
+    for (size_t i=0; i<_IDInput.size();i++){
+        aux = aux + _cost[_IDInput[i]]*_portionInput[i];
+    }
+    return aux;
 }
 
 void iteration::Dinamic::userItemInput(int mealtime) {

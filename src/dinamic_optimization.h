@@ -16,6 +16,7 @@ class Dinamic {
     // compares the meal and portions eaten with that recommended
     bool compareMealstimeItens(std::vector<int> _IDInput,
                                std::vector<int> _localPortionsInput, int mealtime);
+    double getCost(std::vector<double> _costs, std::vector<int> _IDInput, std::vector<int> _PortionInput);
 
     // calculates the number of meals still available
     int measltimeLeftCalc(int currentMealtime, int numberOfRecipes);

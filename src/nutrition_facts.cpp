@@ -199,6 +199,8 @@ size_t nutrition_facts::size() { return this->_calories.size(); }
 
 std::vector<double> nutrition_facts::getCalories() { return this->_calories; }
 
+std::vector<double> nutrition_facts::getCost() { return this->_cost; }
+
 std::vector<double> nutrition_facts::getPreferencesDesjejum() {return this->_breakfastPreferences;}
 
 std::vector<double> nutrition_facts::getSnack1Preferences() {return this->_snack1Preferences;}
