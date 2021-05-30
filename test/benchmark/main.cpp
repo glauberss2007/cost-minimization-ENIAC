@@ -27,7 +27,7 @@ int main() {
 
     for (int i=1;i<=number_of_experiments;i++){
     /// Output file saved on ...ProjectName/experiments/
-    std::string path = LOCAL_PATH_EXPORTS"experiments/static_cost_minimization/experiments_result_";
+    std::string path = LOCAL_PATH_EXPORTS"experiments/dinamic/experiments_result_";
     std::string file_output = path + std::to_string(i);
 
     /// Solving the problem

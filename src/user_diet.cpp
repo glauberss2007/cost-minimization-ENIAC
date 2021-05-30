@@ -163,7 +163,7 @@ double user_diet::evaluate(nutrition_facts &p) {
                 if (total_cost > 5.17 && (total_cost-5.17) > 1) penalties_factor = penalties_factor/((total_cost-5.17)*100);
             }else caloric_target = p.getBreakfastTarget();
             proportionality = 0.2;
-            penalties_factor = penalties_factor / 2.58 * 100;
+            penalties_factor = penalties_factor / 7.74 * 100;
             }
             break;
         case 2: {
@@ -174,7 +174,7 @@ double user_diet::evaluate(nutrition_facts &p) {
             }
             else caloric_target = p.getCaloricTargetLunch();
             proportionality = 0.1;
-            penalties_factor = penalties_factor / 1.29 * 100;
+            penalties_factor = penalties_factor / 3.87 * 100;
             }
             break;
         case 3: {
@@ -184,7 +184,7 @@ double user_diet::evaluate(nutrition_facts &p) {
                     penalties_factor = penalties_factor / ((total_cost - 7.75) * 100);
             } else caloric_target = p.getCaloricTargetLunch();
             proportionality = 0.3;
-            penalties_factor = penalties_factor / 2.87 * 100;
+            penalties_factor = penalties_factor / 11.62 * 100;
             }
             break;
         case 4:{
@@ -195,7 +195,7 @@ double user_diet::evaluate(nutrition_facts &p) {
             }
             else caloric_target = p.getCaloricTargetSnack2();
             proportionality = 0.1;
-            penalties_factor = penalties_factor / 1.29 * 100;
+            penalties_factor = penalties_factor / 3.87 * 100;
             }
             break;
 
@@ -207,7 +207,7 @@ double user_diet::evaluate(nutrition_facts &p) {
             }
             else caloric_target = p.getDinnerCaloriesTarget();
             proportionality = 0.2;
-            penalties_factor = penalties_factor / 2.58 * 100;
+            penalties_factor = penalties_factor / 7.74 * 100;
         }
             break;
 
@@ -218,7 +218,7 @@ double user_diet::evaluate(nutrition_facts &p) {
                     penalties_factor = penalties_factor / ((total_cost - 2.58) * 100);
             }else caloric_target = p.getSupperCaloricTarget();
             proportionality = 0.1;
-            penalties_factor = penalties_factor / 1.29 * 100;
+            penalties_factor = penalties_factor / 3.87 * 100;
         }
             break;
         }
