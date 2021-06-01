@@ -8,7 +8,7 @@ int main() {
     const size_t problem_size = 568;
 
     /// number of experiments
-    int number_of_experiments = 1;
+    int number_of_experiments = 15;
 
     /// Setting parameters
     /* Insert the numeral that indicates the model to be used
@@ -27,7 +27,7 @@ int main() {
 
     for (int i=1;i<=number_of_experiments;i++){
     /// Output file saved on ...ProjectName/experiments/
-    std::string path = LOCAL_PATH_EXPORTS"experiments/dinamic/experiments_result_";
+    std::string path = LOCAL_PATH_EXPORTS"cost-50/experiments_result_";
     std::string file_output = path + std::to_string(i);
 
     /// Solving the problem
