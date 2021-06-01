@@ -78,7 +78,7 @@ void evolutionary_algorithm::run() {
         //if (j > 0 && _fxs[j] > _fxs[j-1]) _fxs[j] = _fxs[j-1];
     }
     // Convergence curve print
-    std::ofstream ofs(LOCAL_PATH_EXPORTS"experiments/dinamic/convergence",
+    std::ofstream ofs(LOCAL_PATH_EXPORTS"cost-50/convergence",
                       std::ofstream::out | std::ofstream::app);
     ofs << "convergence:" << std::endl;
     for (double _fx : _fxs) ofs << _fx << ",";
