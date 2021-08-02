@@ -14,7 +14,7 @@ sudo apt-get install build-essential
 sudo snap install cmake --classic
 ```
 Create folder used to export the experiment files following the structure below:
-- .../cost-minimization-ENIAC/exports/experiments/cost-100
+- .../cost-minimization-ENIAC/experiments/cost-100
 
 Inside project folder, that contains CMakeList.txt execute:
 ```
@@ -26,6 +26,8 @@ As soon as it complete compile and build, you can go to test/benchmark folder an
 ```
 sudo .\optimal-nutrition
 ```
+
+PS: You need to recompile and buil the prejec if some code change were made.
 
 
 
