@@ -1,4 +1,4 @@
-# modern-diet-planning-problem
+# Interative cost control planning problem
 
 ## Experiment reproduction on linux (debian based distributions)
 
